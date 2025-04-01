@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAC Address Generator</title>
+    <style>
+        /* Background Styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background: url('https://wallpapers.com/images/hd/anime-girl-night-4k-ojtddeoq08kr9hyt.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            transition: background 0.5s, color 0.5s;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            transition: 0.5s;
+        }
+        h2 {
+            color: #ffeb3b;
+        }
+
+        /* Input & Buttons */
+        select, button, input {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        select, input {
+            background: #fff;
+            color: #333;
+            width: 90%;
+        }
+        button {
+            background: #ffeb3b;
+            color: #333;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #ff9800;
+        }
+
+        /* Output Styling */
+        #output-container {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #fff;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: lime;
+            font-family: monospace;
+            border-radius: 5px;
+            white-space: pre-line;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            color: white;
+        }
+        .dark-mode .container {
+            background: rgba(50, 50, 50, 0.9);
+        }
+        .dark-mode button {
+            background: #4caf50;
+            color: white;
+        }
+        .dark-mode button:hover {
+            background: #388e3c;
+        }
+        .dark-mode #output-container {
+            background: black;
+            color: #0f0;
+        }
+
+        /* Special Buttons */
+        .copy-btn {
+            background: #4caf50;
+        }
+        .copy-btn:hover {
+            background: #2e7d32;
+        }
+        .toggle-mode {
+            background: #ff5722;
+            color: white;
+        }
+        .toggle-mode:hover {
+            background: #e64a19;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>MAC Address Generator</h2>
+        
+        <label for="employee">Select Employee:</label>
+        <select id="employee">
+            <option value="Harsh">Harsh</option>
+        </select>
+        
+        <label for="client">Select Client:</label>
+        <select id="client">
+            <option value="Nexa">Nexa</option>
+            <option value="Veecrew">Veecrew</option>
+            <option value="Sample Trust">Sample Trust</option>
+            <option value="Opinion MR">Opinion MR</option>
+        </select>
+
+        <label for="link">Enter Link (Include 'uid=' at the end):</label>
+        <input type="text" id="link" placeholder="https://yourlink.com/uid=">
+
+        <button onclick="generateMAC()">Generate 100 MAC Addresses</button>
+        <button class="copy-btn" onclick="copyMAC()">Copy</button>
+        <button class="toggle-mode" onclick="toggleMode()">Toggle Dark Mode</button>
+        
+        <h3>Generated MAC Addresses with Links:</h3>
+        <div id="output-container">
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        function getRandomMAC() {
+            let mac = [];
+            for (let i = 0; i < 5; i++) {
+                mac.push((Math.floor(Math.random() * 256)).toString(16).padStart(2, '0').toUpperCase());
+            }
+            return mac.join('-') + '-';
+        }
+
+        function generateMAC() {
+            let userLink = document.getElementById("link").value.trim();
+            let outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = "";
+
+            // Ensure the link ends with 'uid='
+            if (!userLink.endsWith("uid=")) {
+                alert("Please enter a valid link ending with 'uid='");
+                return;
+            }
+
+            // Randomized initials list
+            let initialsList = ["SM", "VM", "MT", "HT"];
+            let selectedEmployee = document.getElementById("employee").value;
+            let selectedClient = document.getElementById("client").value;
+
+            let macList = "";
+            for (let i = 0; i < 100; i++) {
+                let macAddress = getRandomMAC() + initialsList[Math.floor(Math.random() * initialsList.length)];
+
+                // Add "AB" to the MAC address for Harsh and Sample Trust
+                if (selectedEmployee === "Harsh" && selectedClient === "Sample Trust") {
+                    macAddress += "AB";
+                }
+
+                macList += userLink + macAddress + "\n";
+            }
+            outputDiv.textContent = macList;
+        }
+
+        function copyMAC() {
+            let text = document.getElementById("output").textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("MAC Addresses with Links Copied!");
+            });
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script>
+</body>
+</html>
